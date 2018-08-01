@@ -206,10 +206,10 @@ def load_model():
 
 def test_bayes():
     news_path = path + "/origin_news_data_12.csv"
-
+    # news_path = father_path + "/origin_news_data.csv"
     # #---------
     generate_wordmessage(news_path)
-    vocabulary = create_vocabulary(path+"/word_message_12.csv", 2)
+    vocabulary = create_vocabulary(path+"/word_message.csv", 10)
     posts_list, classes_list = get_origin_data(news_path, vocabulary)
     total_len = len(classes_list)
     basic_set = [i for i in range(0, total_len)]
@@ -219,9 +219,9 @@ def test_bayes():
     train_labels = [classes_list[i] for i in basic_set[0:int(total_len*train_test_ratio)]]
     test_posts = [posts_list[i] for i in basic_set[int(total_len*train_test_ratio):]]
     test_labels = [classes_list[i] for i in basic_set[int(total_len * train_test_ratio):]]
-    fWords, label_feature = genFeature(posts_list, classes_list)
+    fWords, label_feature = genFeature(train_posts, train_labels)
     scores = train_bayes(fWords, train_posts, train_labels, label_feature)
-    save_model(scores, fWords, label_feature)
+    # save_model(scores, fWords, label_feature)
     #---------
 
     #-----------------test--------------------

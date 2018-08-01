@@ -89,7 +89,7 @@ def get_origin_data(time_period, mode, extraClass=False):
 
 
 def change_interval_influence():
-    time_period = 12*60*60
+    time_period = 2*60*60
     datapath = os.path.abspath(os.path.join(os.getcwd(), "..")) + '/data'
     dicts = read_to_dict(datapath+'/backup.csv')
     previous_news = read_to_dict(datapath+'/origin_news_data.csv')
@@ -99,7 +99,7 @@ def change_interval_influence():
         update_time.append(value['time'])
     for key, value in previous_news.items():
         value = eval(value)
-        if 0 in titles:
+        if 0 in value:
             titles.append(value[0])
         else:
             titles.append(value[1])
@@ -108,14 +108,13 @@ def change_interval_influence():
     # titles = titles[60:]
 
     print("=========Get previous data ok==========")
-    btc_chart_data = get_poloniex_data('USDT_BTC', 300, 1486710058)
+    btc_chart_data = get_poloniex_data('USDT_BTC', 300, 1486710000)
     btc_chart_data.set_index('date', inplace=True)
     percentage_changes = []
     round_up_percentage_changes = []
     flag_change = []
 
     for time in update_time:
-        if time < 1506816000: continue
         now = btc_chart_data.iloc[
             btc_chart_data.index.get_loc(time, method='nearest')]['close']
 
@@ -128,13 +127,12 @@ def change_interval_influence():
         percentage_changes.append(price_change)
         round_up_percentage_changes.append(percentage_change(price_change))
         flag_change.append(1) if price_change > 0.0 else flag_change.append(0)
-        print(flag_change[-1])
 
     origin_news_tag = {}
 
     for i in range(len(flag_change)):
         origin_news_tag[i] = {flag_change[i]: titles[i]}
-    write_to_csv(origin_news_tag, datapath + "/train_data/origin_news_data_12.csv", ['flag', 'news'])
+    write_to_csv(origin_news_tag, datapath + "/train_data/origin_news_data_2.csv", ['flag', 'news'])
     print("==========Obtain Original Data Finish=========")
 
 def get_current_news(time_period, mode):
@@ -212,7 +210,7 @@ def get_test_news(time_period, mode, extraClass=False):
             if price_change > 0.0: flag_change.append(1)
             else:   flag_change.append(-1)
 
-    prices = {}
+    # prices = {}
     # count = 20
     # while count:
     #     price = btc_chart_data.iloc[
