@@ -24,6 +24,8 @@ def grabber_newsbitcoin(load_times, mode):
     browser = webdriver.Chrome(chrome_options=chrome_options, executable_path=executable_path)
     browser.get(html)
 
+    end_timestamp = 1516406400
+
     TIME_OUT = 1
     titles = np.array([])
     update_times = np.array([])
@@ -38,8 +40,11 @@ def grabber_newsbitcoin(load_times, mode):
                 page_update_times = []
                 for page_update_time in page_update_time_elememts:
                     page_update_times.append(page_update_time.get_attribute("datetime"))
+                this_time = datetime.datetime.strptime(page_update_times[-1], '%Y-%m-%dT%H:%M:%S+00:00').timestamp()
                 titles = np.append(titles, page_titles)
                 update_times = np.append(update_times, page_update_times)
+                if this_time < end_timestamp:
+                    break
             except Exception:
                 PAGE_OUT -= 1
 
@@ -91,6 +96,7 @@ def grabber_ccn(load_times, mode):
     browser = webdriver.Chrome(chrome_options=chrome_options, executable_path=executable_path)
     browser.get(html)
     PAGE_OUT = 50
+    end_timestamp = 1516406400
 
     if mode == 0:
         while load_times and PAGE_OUT:
@@ -103,6 +109,9 @@ def grabber_ccn(load_times, mode):
                 browser.find_element_by_class_name("load-more-btn").click()
                 print("====load page====", load_times)
                 load_times -= 1
+                this_time = datetime.datetime.strptime(browser.find_elements_by_class_name("updated")[-1].text,  '%B %d, %Y %H:%M').timestamp()
+                if this_time < end_timestamp:
+                    break
                 time.sleep(0.5)
             except Exception:
                 PAGE_OUT -= 1
@@ -115,7 +124,7 @@ def grabber_ccn(load_times, mode):
                 time.sleep(0.1)
             try:
                 browser.find_element_by_class_name("load-more-btn").click()
-                end_time = int(datetime.datetime.strptime(browser.find_elements_by_class_name("updated")[-1].text, '%Y-%m-%dT%H:%M:%S+00:00').timestamp() + 32400)
+                end_time = int(datetime.datetime.strptime(browser.find_elements_by_class_name("updated")[-1].text,  '%B %d, %Y %H:%M').timestamp() + 32400)
                 print(end_time)
                 time.sleep(0.1)
             except Exception:

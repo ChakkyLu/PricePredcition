@@ -39,7 +39,7 @@ def altitude_word(processed_titles, change):
 def get_origin_data(time_period, mode, extraClass=False):
     datapath = os.path.abspath(os.path.join(os.getcwd(), "..")) + '/data'
     if mode == 0:
-        titles, update_time = grabber_newsbitcoin(500, 0)
+        titles, update_time = grabber_newsbitcoin(10, 0)
     if mode == 1:
         titles, update_time = grabber_ccn(500, 0)
     processed_titles, processed_time = preprocessing_newsdata(
@@ -229,4 +229,3 @@ def get_test_news(time_period, mode, extraClass=False):
     # write_to_csv(prices, datapath + "/previous_price.csv", ['date', 'price'])
 
     print("==========Obtain test Data Finish=========")
-

@@ -7,8 +7,8 @@ from base.generate_orgin_data import *
 from LSTM import *
 
 if __name__ == "__main__":
-    # get_origin_data(5, 0)
-    change_interval_influence()
+    get_origin_data(5, 0)
+    # change_interval_influence()
     # test_bayes()
     # getBitcoin(1)
     # lstm()
